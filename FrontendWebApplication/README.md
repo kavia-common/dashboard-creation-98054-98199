@@ -25,6 +25,10 @@ Copy `.env.example` to `.env` and adjust:
 - npm start — dev server on port 3000
 - npm test — run unit/component tests in CI mode
 - npm run build — production build
+
+Build/install notes:
+- Ensure install includes all dependencies (including react-scripts). Use: npm ci (preferred) or npm install.
+- Avoid setting NODE_ENV=production during install, or keep react-scripts in dependencies (already configured).
 - npm run lint — run eslint
 - npm run cy:open — open Cypress runner
 - npm run cy:run — run Cypress e2e tests headlessly

@@ -125,4 +125,4 @@ Cypress.Commands.add('seedAuth', () => {
   window.localStorage.setItem('token', 'fake.jwt.token');
 });
 
-import 'cypress-plugin-testing-library';
+import '@testing-library/cypress/add-commands';
