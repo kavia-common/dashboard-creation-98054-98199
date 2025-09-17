@@ -18,8 +18,25 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
-// Response normalization
+/**
+ * Normalize axios response to plain data.
+ * Allows callers to always receive the parsed payload.
+ */
 const normalize = (r) => r.data ?? r;
+
+/**
+ * Optional: auto-logout on 401 responses for better UX.
+ */
+client.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error?.response?.status === 401) {
+      // Remove potentially invalid/expired token
+      localStorage.removeItem('token');
+    }
+    return Promise.reject(error);
+  }
+);
 
 // PUBLIC_INTERFACE
 export const api = {

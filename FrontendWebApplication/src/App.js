@@ -8,9 +8,12 @@ import ReportsPage from './pages/ReportsPage';
 import UsersPage from './pages/UsersPage';
 import ChartsPage from './pages/ChartsPage';
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * ProtectedRoute ensures that only authenticated users can access the child route.
+ * Redirects unauthenticated users to /login.
+ */
 function ProtectedRoute({ children }) {
-  /** Ensures that only authenticated users can access the route. */
   const { isAuthenticated } = useAuth();
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

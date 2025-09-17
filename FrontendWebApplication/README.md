@@ -1,17 +1,19 @@
 # React Dashboard Frontend
 
-This is the production-ready React frontend for the dashboard application. It provides:
-- JWT login and protected routes
+Production‑ready React frontend for the dashboard application.
+
+Key features:
+- JWT login with protected routes
 - Sidebar navigation with active highlighting
 - CRUD for Users and Reports with validation, pagination, search, and feedback
-- Charts using Chart.js and Recharts with API-driven data
-- Axios-based API layer with error handling
+- Charts using Chart.js and Recharts (API‑driven)
+- Axios API layer with interceptors and error normalization
 - Responsive modular layout
-- Docker image served via Nginx
+- Docker image served via Nginx with SPA routing support
 
 ## Requirements
 - Node.js 18+
-- Backend API reachable via `REACT_APP_API_BASE_URL`
+- Backend API reachable via `REACT_APP_API_BASE_URL` (CORS enabled on backend)
 
 ## Environment variables
 Copy `.env.example` to `.env` and adjust:
@@ -23,18 +25,21 @@ Copy `.env.example` to `.env` and adjust:
 - npm start — dev server on port 3000
 - npm test — run tests in CI mode
 - npm run build — production build
+- npm run lint — run eslint
 
-In CI environments, prefer:
-- npm ci
-before running build to ensure dependencies (like react-router-dom) are installed deterministically.
+CI tips:
+- Use `npm ci` before build for deterministic installs.
 
 ## Development
 1. `npm install`
-2. `cp .env.example .env` and set correct API base URL
-3. `npm start`
+2. `cp .env.example .env` and set REACT_APP_API_BASE_URL to your backend (default http://localhost:8000)
+3. `npm start` then open http://localhost:3000
 
-## API integration
-The API base URL is configured via `REACT_APP_API_BASE_URL`. JWT token is stored in localStorage and attached as `Authorization: Bearer <token>`.
+## API integration and Auth
+- Base URL via `REACT_APP_API_BASE_URL`.
+- JWT token stored in localStorage under `token` and attached as `Authorization: Bearer <token>`.
+- Expected endpoints: POST /login, CRUD for `/users` and `/reports`, GET `/charts/data`.
+- Handle CORS in backend accordingly.
 
 ## Docker
 Build:
@@ -43,14 +48,15 @@ Build:
 Run:
 - docker run -p 3000:3000 dashboard-frontend
 
-Nginx is configured for SPA routing and serves on port 3000.
+Nginx serves on port 3000; SPA routing handled in nginx.conf.
 
 ## Project structure
-- src/auth — auth provider
-- src/layout — dashboard shell and sidebar
+- src/auth — auth provider (AuthContext, login/logout, token handling)
+- src/layout — dashboard shell and sidebar (DashboardLayout)
 - src/pages — Login, Users, Reports, Charts
-- src/services — API client
+- src/services — API client (axios with interceptors)
+- src/utils — utility placeholders
 
 ## Notes
-- This project expects the backend to expose endpoints: POST /login, GET/POST/PUT/DELETE for /users and /reports, GET /charts/data.
-- Handle CORS on the backend accordingly.
+- Backend must provide JWT auth and secure CRUD endpoints.
+- Ensure HTTPS and secure cookie/storage policies in production environments as needed.
