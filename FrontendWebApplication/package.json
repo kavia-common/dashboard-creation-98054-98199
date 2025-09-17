@@ -21,7 +21,10 @@
     "test": "cross-env CI=true react-scripts test --watchAll=false",
     "lint": "eslint --ext .js,.jsx src",
     "eject": "react-scripts eject",
-    "serve:prod": "npx serve -s build -l 3000"
+    "serve:prod": "npx serve -s build -l 3000",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test:e2e": "start-server-and-test start http://localhost:3000 cy:run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,6 +42,9 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "cypress": "^13.7.3",
+    "cypress-plugin-testing-library": "^3.0.10",
+    "start-server-and-test": "^2.0.7"
   }
 }

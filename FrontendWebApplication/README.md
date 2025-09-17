@@ -23,9 +23,12 @@ Copy `.env.example` to `.env` and adjust:
 
 ## Scripts
 - npm start — dev server on port 3000
-- npm test — run tests in CI mode
+- npm test — run unit/component tests in CI mode
 - npm run build — production build
 - npm run lint — run eslint
+- npm run cy:open — open Cypress runner
+- npm run cy:run — run Cypress e2e tests headlessly
+- npm run test:e2e — start app and run Cypress e2e (uses start-server-and-test)
 
 CI tips:
 - Use `npm ci` before build for deterministic installs.
@@ -34,6 +37,22 @@ CI tips:
 1. `npm install`
 2. `cp .env.example .env` and set REACT_APP_API_BASE_URL to your backend (default http://localhost:8000)
 3. `npm start` then open http://localhost:3000
+
+## Testing
+
+Unit/Component (Jest + RTL):
+- npm test
+
+End-to-End (Cypress):
+- Start dev server in one terminal: npm start
+- In another terminal:
+  - Interactive runner: npm run cy:open
+  - Headless: npm run cy:run
+- One-shot in CI (headless, non-interactive): npm run test:e2e
+
+Notes:
+- E2E tests mock backend APIs via cy.intercept; no backend is required for running Cypress locally/CI.
+- Tests cover: login/logout, protected routes, sidebar navigation, CRUD UI for users/reports, charts rendering, form validation, and error messaging.
 
 ## API integration and Auth
 - Base URL via `REACT_APP_API_BASE_URL`.
