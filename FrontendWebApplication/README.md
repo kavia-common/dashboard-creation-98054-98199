@@ -63,6 +63,7 @@ Notes:
 ## Docker
 Build:
 - docker build -t dashboard-frontend --build-arg REACT_APP_API_BASE_URL=http://localhost:8000 .
+  If you encounter build errors related to ajv/ajv-keywords, ensure no conflicting overrides are present in package.json. This project relies on react-scripts to manage those transitive versions.
 
 Run:
 - docker run -p 3000:3000 dashboard-frontend
