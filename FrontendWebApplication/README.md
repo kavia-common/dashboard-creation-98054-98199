@@ -63,7 +63,28 @@ Notes:
 ## Docker
 Build:
 - docker build -t dashboard-frontend --build-arg REACT_APP_API_BASE_URL=http://localhost:8000 .
-  If you encounter build errors related to ajv/ajv-keywords, ensure no conflicting overrides are present in package.json. This project relies on react-scripts to manage those transitive versions.
+
+Troubleshooting build error "(0 , _schemaUtils.validate) is not a function":
+- Root cause: schema-utils v4+ exposes validate differently; terser-webpack-plugin@5 expects v3 API.
+- Resolution in this repo:
+  - package.json "overrides" explicitly pins: ajv@6.12.6, ajv-keywords@3.5.2, schema-utils@3.3.0, terser-webpack-plugin@5.3.10, and targets nested packages to force schema-utils@3.
+  - .npmrc sets legacy-peer-deps=true to avoid peer resolution conflicts in CI.
+- Force a clean install so overrides take effect:
+  - rm -rf node_modules package-lock.json
+  - npm cache clean --force
+  - npm ci --legacy-peer-deps
+- The repo includes scripts/patch-lock.js which coerces package-lock to compatible versions automatically on prepare.
+- You can verify resolved versions:
+  - npm run check:tooling
+- Then build:
+  - npm run build
+
+Auto-fix:
+- The script scripts/fix-tooling.js runs during prebuild to enforce CRA5-compatible versions (terser-webpack-plugin@5, schema-utils@3, ajv@6, ajv-keywords@3).
+- If it reports a mismatch even after attempt, run:
+  - rm -rf node_modules package-lock.json && npm cache clean --force
+  - npm ci --legacy-peer-deps
+  - npm run build
 
 Run:
 - docker run -p 3000:3000 dashboard-frontend
