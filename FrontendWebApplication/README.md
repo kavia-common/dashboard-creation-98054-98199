@@ -22,7 +22,7 @@ Copy `.env.example` to `.env` and adjust:
 - REACT_APP_DEFAULT_THEME
 
 ## Scripts
-- npm start — dev server on port 3000
+- npm start — dev server on port 3000 (includes OpenSSL legacy provider workaround)
 - npm test — run unit/component tests in CI mode
 - npm run build — production build
 - npm run lint — run eslint
