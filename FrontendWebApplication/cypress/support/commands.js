@@ -1,4 +1,9 @@
-// Custom Cypress commands for the dashboard app
+/* Custom Cypress commands for the dashboard app
+   Note: Using @testing-library/cypress ensures stable install of testing-library commands.
+*/
+import '@testing-library/cypress';
+
+
 
 Cypress.Commands.add('mockApi', () => {
   // read base url if needed
