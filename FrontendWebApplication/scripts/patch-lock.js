@@ -58,6 +58,37 @@ try {
     }
   }
 
+  // Extra hardening: if any nested entry accidentally resolved schema-utils >=4,
+  // coerce it back to 3.3.0 so CRA5 toolchain remains compatible.
+  const coerceSchemaUtils = (obj) => {
+    if (!obj) return;
+    Object.keys(obj).forEach((k) => {
+      if (k === 'schema-utils' || k.endsWith('node_modules/schema-utils')) {
+        const entry = obj[k];
+        if (entry && typeof entry === 'object') {
+          const v = entry.version;
+          if (typeof v === 'string') {
+            const major = parseInt((v.match(/^(\d+)\./) || [])[1] || '0', 10);
+            if (!major || major >= 4 || major < 3) {
+              entry.version = '3.3.0';
+            }
+          } else {
+            entry.version = '3.3.0';
+          }
+        }
+      }
+    });
+  };
+  coerceSchemaUtils(json.packages);
+  if (json.dependencies && json.dependencies['schema-utils']) {
+    const dep = json.dependencies['schema-utils'];
+    const v = dep.version;
+    const major = parseInt((String(v || '').match(/^(\d+)\./) || [])[1] || '0', 10);
+    if (!major || major >= 4 || major < 3) {
+      dep.version = '3.3.0';
+    }
+  }
+
   fs.writeFileSync(lockPath, JSON.stringify(json, null, 2));
   console.log('package-lock.json patched for webpack toolchain compatibility.');
 } catch (e) {
