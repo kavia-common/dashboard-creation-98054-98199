@@ -16,6 +16,7 @@ const targets = [
   'webpack',
   'terser-webpack-plugin',
   'schema-utils',
+  'babel-loader',
   'ajv',
   'ajv-keywords'
 ];

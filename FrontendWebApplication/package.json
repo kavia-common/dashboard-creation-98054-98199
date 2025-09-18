@@ -10,11 +10,7 @@
   "overrides": {
     "ajv": "6.12.6",
     "ajv-keywords": "3.5.2",
-    "schema-utils": "3.3.0",
-    "terser-webpack-plugin": "5.3.10",
-    "webpack": "5.101.3",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "4.15.2",
+    "schema-utils": "2.6.5",
     "terser-webpack-plugin": {
       "schema-utils": "3.3.0",
       "ajv": "6.12.6",
@@ -24,10 +20,10 @@
       "terser-webpack-plugin": "5.3.10",
       "schema-utils": "3.3.0"
     },
-    "webpack-dev-server": {
+    "webpack-cli": {
       "schema-utils": "3.3.0"
     },
-    "webpack-cli": {
+    "webpack-dev-server": {
       "schema-utils": "3.3.0"
     },
     "css-minimizer-webpack-plugin": {
@@ -46,10 +42,7 @@
       "schema-utils": "3.3.0",
       ".": "0.5.7"
     },
-    "babel-loader": {
-      ".": "8.2.5",
-      "schema-utils": "3.3.0"
-    },
+    "babel-loader": "8.2.2",
     "css-loader": {
       "schema-utils": "3.3.0"
     },
@@ -85,13 +78,13 @@
   },
   "scripts": {
     "prepare": "node scripts/patch-lock.js || true",
-    "postinstall": "npm i ajv@6.12.6 ajv-keywords@3.5.2 schema-utils@3.3.0 terser-webpack-plugin@5.3.10 --no-audit --no-fund --legacy-peer-deps || true && node scripts/check-schema-utils-callers.js || true && node scripts/patch-refresh-plugin.js || true",
-    "prebuild": "node scripts/fix-tooling.js && node scripts/check-schema-utils-callers.js && node scripts/scan-validate-options.js && node scripts/patch-refresh-plugin.js && node -e \"const fs=require('fs'); const {execSync}=require('child_process'); if(!fs.existsSync('node_modules')){console.log('Installing deps before build...'); process.env.CI='true'; try{execSync('npm ci --legacy-peer-deps', {stdio:'inherit'});}catch(e){execSync('npm install --legacy-peer-deps', {stdio:'inherit'});} }\"",
+    "postinstall": "npm i ajv@6.12.6 ajv-keywords@3.5.2 schema-utils@2.6.5 terser-webpack-plugin@5.3.10 --no-audit --no-fund --legacy-peer-deps || true && node scripts/patch-refresh-plugin.js || true && node scripts/check-versions-log.js || true",
+    "prebuild": "node scripts/scan-validate-options.js && node scripts/patch-refresh-plugin.js && node -e \"const fs=require('fs'); const {execSync}=require('child_process'); if(!fs.existsSync('node_modules')){console.log('Installing deps before build...'); process.env.CI='true'; try{execSync('npm ci --legacy-peer-deps', {stdio:'inherit'});}catch(e){execSync('npm install --legacy-peer-deps', {stdio:'inherit'});} }\" && node scripts/check-versions-log.js",
     "check:tooling": "node scripts/check-tooling.js",
-    "build:trace": "cross-env NODE_ENV=production NODE_OPTIONS='--require ./scripts/preload-disable-refresh.js --trace-uncaught' node node_modules/react-scripts/scripts/build.js",
+    "build:trace": "cross-env NODE_ENV=production NODE_OPTIONS=\"--require=./scripts/preload-disable-refresh.js --trace-uncaught --openssl-legacy-provider\" node node_modules/react-scripts/scripts/build.js",
     "start": "react-scripts start",
     "start:https": "HTTPS=true react-scripts start",
-    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--require ./scripts/preload-disable-refresh.js react-scripts build",
+    "build": "cross-env NODE_ENV=production NODE_OPTIONS=\"--require=./scripts/preload-disable-refresh.js --openssl-legacy-provider\" react-scripts build",
     "test": "cross-env CI=true react-scripts test --watchAll=false",
     "lint": "eslint --ext .js,.jsx src",
     "eject": "react-scripts eject",

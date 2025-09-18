@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Patch package-lock.json to enforce webpack toolchain compatibility for react-scripts@5:
- * - schema-utils@3.x (3.3.0)
+ * - schema-utils@2.x (2.6.5) for babel-loader 8.2.2 compatibility
  * - terser-webpack-plugin@5.x (5.3.10)
  * - ajv@6.x (6.12.6) and ajv-keywords@3.x (3.5.2)
  *
@@ -20,7 +20,7 @@ try {
   const json = JSON.parse(raw);
 
   const forceVersions = {
-    'schema-utils': '3.3.0',
+    'schema-utils': '2.6.5',
     'terser-webpack-plugin': '5.3.10',
     'ajv': '6.12.6',
     'ajv-keywords': '3.5.2'
@@ -59,7 +59,7 @@ try {
   }
 
   // Extra hardening: if any nested entry accidentally resolved schema-utils >=4,
-  // coerce it back to 3.3.0 so CRA5 toolchain remains compatible.
+  // coerce it back to 2.6.5 so babel-loader 8.2.2 remains compatible.
   const coerceSchemaUtils = (obj) => {
     if (!obj) return;
     Object.keys(obj).forEach((k) => {
@@ -69,11 +69,11 @@ try {
           const v = entry.version;
           if (typeof v === 'string') {
             const major = parseInt((v.match(/^(\d+)\./) || [])[1] || '0', 10);
-            if (!major || major >= 4 || major < 3) {
-              entry.version = '3.3.0';
+            if (!major || major >= 4) {
+              entry.version = '2.6.5';
             }
           } else {
-            entry.version = '3.3.0';
+            entry.version = '2.6.5';
           }
         }
       }

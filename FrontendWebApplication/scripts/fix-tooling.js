@@ -39,7 +39,7 @@ let needsFix = false;
 // CRA 5 expects terser-webpack-plugin 5.x and schema-utils 3.x
 if (resolved.reactScripts && semverMajor(resolved.reactScripts) === 5) {
   if (!resolved.terser || semverMajor(resolved.terser) !== 5) needsFix = true;
-  if (!resolved.schemaUtils || semverMajor(resolved.schemaUtils) !== 3) needsFix = true;
+  if (!resolved.schemaUtils || ![2,3].includes(semverMajor(resolved.schemaUtils))) needsFix = true;
   if (!resolved.ajv || semverMajor(resolved.ajv) !== 6) needsFix = true;
   if (!resolved.ajvKeywords || semverMajor(resolved.ajvKeywords) !== 3) needsFix = true;
 }
@@ -47,7 +47,7 @@ if (resolved.reactScripts && semverMajor(resolved.reactScripts) === 5) {
 if (needsFix) {
   try {
     console.log('Fixing webpack toolchain versions for CRA5...');
-    execSync('npm i --no-audit --no-fund --legacy-peer-deps terser-webpack-plugin@5.3.10 schema-utils@3.3.0 ajv@6.12.6 ajv-keywords@3.5.2', { stdio: 'inherit' });
+    execSync('npm i --no-audit --no-fund --legacy-peer-deps terser-webpack-plugin@5.3.10 schema-utils@2.6.5 ajv@6.12.6 ajv-keywords@3.5.2 babel-loader@8.2.2', { stdio: 'inherit' });
     // Re-check
     const post = {
       terser: getVersion('terser-webpack-plugin'),
@@ -57,7 +57,7 @@ if (needsFix) {
     };
     console.log('Post-fix versions:', post);
     // If still incorrect, exit non-zero so CI can attempt a clean install step
-    if (semverMajor(post.terser) !== 5 || semverMajor(post.schemaUtils) !== 3) {
+    if (semverMajor(post.terser) !== 5 || ![2,3].includes(semverMajor(post.schemaUtils))) {
       console.error('Tooling still mismatched after fix attempt.');
       process.exit(1);
     }
